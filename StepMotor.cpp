@@ -1,7 +1,5 @@
 #include "StepMotor.h"
 
-#include "thread/actions/Action.hpp"
-#include "thread/actions/ActionStep.h"
 #include "Global.h"
 
 /**
@@ -40,42 +38,42 @@ StepMotor::~StepMotor()
  * @param time
  * the amount of time to step
  */
-void StepMotor::move(int steps, int time)
-{
-
-	int direction = steps / abs(steps);
-	int microPerStep = 0;
-
-	// Do nothing if steps is 0
-	if((steps == 0) || (direction == 0))
-	{
-		return;
-	}
-
-	// Microseconds per every step (delay per step)
-	microPerStep = round((time / steps) * 1000);
-
-	// The motor won't move if the delay between
-	// phase changes is less than 1 microsecond
-	if (time > steps)
-	{
-		time = steps;
-	}
-
-	for (int s = 0; s < abs(steps); s++)
-	{
-		// Stepping
-		Action *step = new ActionStep("step", getStepperId(), this, direction);
-		Global::threadManager.addAction(step);
-
-		// "Delay"
-		Action *delay = new Action("delay", getStepperId(), 0, microPerStep);
-		Global::threadManager.addAction(delay);
-		// This isn't an actual delay, but it will take up an empty
-		// chunk of time, acting like a delay
-
-	}
-}
+//void StepMotor::move(int steps, int time)
+//{
+//
+//	int direction = steps / abs(steps);
+//	int microPerStep = 0;
+//
+//	// Do nothing if steps is 0
+//	if((steps == 0) || (direction == 0))
+//	{
+//		return;
+//	}
+//
+//	// Microseconds per every step (delay per step)
+//	microPerStep = round((time / steps) * 1000);
+//
+//	// The motor won't move if the delay between
+//	// phase changes is less than 1 microsecond
+//	if (time > steps)
+//	{
+//		time = steps;
+//	}
+//
+//	for (int s = 0; s < abs(steps); s++)
+//	{
+//		// Stepping
+//		Action *step = new ActionStep("step", getStepperId(), this, direction);
+//		Global::threadManager.addAction(step);
+//
+//		// "Delay"
+//		Action *delay = new Action("delay", getStepperId(), 0, microPerStep);
+//		Global::threadManager.addAction(delay);
+//		// This isn't an actual delay, but it will take up an empty
+//		// chunk of time, acting like a delay
+//
+//	}
+//}
 
 /*
  * This will move the stepper motor shaft with the

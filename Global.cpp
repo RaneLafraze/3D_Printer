@@ -2,7 +2,6 @@
 
 Global::Global() {
 	machine = Machine();
-	threadManager = ThreadManager();
 	cmdManager = CommandManager(&machine);
 }
 

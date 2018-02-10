@@ -2,7 +2,6 @@
 #define GLOBAL_H_
 
 #include "Machine.h"
-#include "thread/ThreadManager.h"
 #include "commands/CommandManager.h"
 
 //#include "Arduino.h"
@@ -11,7 +10,6 @@
 //#include "commands/CommandManager.h"
 
 class Machine;
-class ThreadManager;
 class CommandManager;
 
 // Will store global variables and objects
@@ -21,7 +19,6 @@ public:
 	virtual ~Global();
 
 	static Machine machine;
-	static ThreadManager threadManager;
 	static CommandManager cmdManager;
 
 };
