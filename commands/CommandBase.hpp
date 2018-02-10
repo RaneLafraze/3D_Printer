@@ -29,7 +29,8 @@ public:
 	//virtual void execute() = 0;
 
 	// Where line is the line the command was found on (includes parameters)
-	void execute(String line);
+	virtual void execute(String line);
+	virtual void update(); // Should be called in a loop
 
 	// Get / Set methods
 	String getName()
@@ -42,12 +43,18 @@ public:
 		return tag;
 	}
 
+	bool getIsRunning()
+	{
+		return isRunning;
+	}
 
 protected:
-	String name;
-	String tag;
+	String name = ""; // Dummy values
+	String tag = "";
 
 	Machine *machine = 0;
+
+	bool isRunning = false; // True after execute(), false once finished
 
 };
 
