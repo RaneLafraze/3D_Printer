@@ -134,21 +134,22 @@ double* Machine::getPosition()
 /**
  * Removes all comments from the g-code. Comments
  * begin with ";"
+ * TESTED: 1/10/18
  */
 String Machine::removeComments(String raw)
 {
 
-	int lastIndex = 0;
-	int endIndex = 0;
+	size_t commentIndex = 0;
+	size_t endIndex = 0;
 
-	while(lastIndex != -1)
+	while(commentIndex != -1)
 	{
-		lastIndex = raw.indexOf(";");
-		endIndex = raw.indexOf("\n", lastIndex);
+		commentIndex = raw.indexOf(";");
+		endIndex = raw.indexOf("\n", commentIndex);
 
-		if((lastIndex != -1) && (endIndex != -1))
+		if((commentIndex != -1) && (endIndex != -1))
 		{
-			raw = raw.substring(0, (unsigned)lastIndex) + raw.substring((unsigned)endIndex);
+			raw = raw.substring(0, (unsigned)commentIndex) + raw.substring((unsigned)endIndex);
 		}
 	}
 
