@@ -17,7 +17,12 @@ public:
 	G1(String arg_tag, Machine *arg_machine);
 	virtual ~G1();
 
-	void execute(String line); // Override from CommandBase
+	void execute(String line) override; // Override from CommandBase
+	void update(long delta) override;
+
+private:
+	double targetPos[3];
+
 };
 
 #endif /* COMMANDS_G1_H_ */

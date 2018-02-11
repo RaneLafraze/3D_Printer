@@ -1,4 +1,5 @@
 #include "G1.h"
+#include <math.h>
 #include <map>
 
 G1::G1(String arg_name, String arg_tag, Machine *arg_machine)
@@ -20,48 +21,53 @@ G1::~G1() {
  * This will run this command. It will perform the operations within
  * the Machine via the Machine pointer defined in the constructor. The
  * line variable should INCLUDE the command tag.
+ * TESTED: 1/10/18
  */
 void G1::execute(String line)
 {
 	double *currentPos = machine->getPosition();
-	double targetPos[3];
-	double maxTravel = 0.0;
-
+//	double maxTravel = 0.0; // ??
 	std::map<char, double> parameters;
+
 	char identifier = 'X';
 	double value = 0.0;
-	int spaceIndex = line.indexOf(" ");
+	size_t spaceIndex = line.indexOf(" "); // Acts as the "cursor"
 	String part = "";
 
 	// Validate
-	part = line.substring(0, spaceIndex);
-	if(part != tag)
+	if(line.indexOf(tag) == -1)
 	{
-		// If it doesn't equal the tag, something went wrong, so exit
+		// If the tag was not found, something went wrong, so exit
 		return;
+	} else
+	{
+		spaceIndex = line.indexOf(" ", line.indexOf(tag));
 	}
 
-	// Move past the command tag
-	spaceIndex = line.indexOf(" ", spaceIndex + 1);
-
 	// Populate parameters map
-	while(spaceIndex != -1)
+	while(spaceIndex != std::string::npos)
 	{
 		// If there is a trailing space, continue parsing
 		if(line.indexOf(" ", spaceIndex + 1))
 		{
-			part = line.substring(spaceIndex, line.indexOf(" ", spaceIndex + 1));
+			part = line.substring(spaceIndex + 1, line.indexOf(" ", spaceIndex + 1));
 		} else // Otherwise use the \n character to finish
 		{
 			part = line.substring(spaceIndex, line.indexOf("\n"));
 		}
 
-		identifier = line.charAt(0);
-		value = atof(line.substring(1, line.length()).c_str()); // Convert to double
+		if(part.length() > 0)
+		{
+			identifier = part.charAt(0);
+			value = atof(part.substring(1, part.length()).c_str()); // Convert to double
 
-		parameters.insert(std::pair<char, double>(identifier, value));
+			parameters.insert(std::pair<char, double>(identifier, value));
 
-		spaceIndex = line.indexOf(" ", spaceIndex + 1);
+			spaceIndex = line.indexOf(" ", spaceIndex + 1);
+		} else
+		{
+			spaceIndex++; // To avoid infinite loops
+		}
 	}
 
 	// Compute the desired position
@@ -92,6 +98,23 @@ void G1::execute(String line)
 	{
 		targetPos[2] = currentPos[2];
 	}
+
+	isRunning = true;
+
+}
+
+/**
+ * This should be called in a loop. It will take care of movement and
+ * the updating of this command and the values concerning the operations.
+ * It should also end the command by setting isRunning to false.
+ *
+ * @param delta
+ * the time since the last update
+ */
+void G1::update(long delta)
+{
+
+
 
 }
 
