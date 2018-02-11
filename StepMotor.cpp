@@ -122,9 +122,9 @@ void StepMotor::step(int direction)
 		return;
 	}
 
-	// TODO: See if this delay is too fast
+	// TODO: See if this delay is too fast or too slow
 	digitalWrite(PIN, HIGH);
-	delayMicroseconds(1);
+	delayMicroseconds(500); // Fastest delay for Arduino
 	digitalWrite(PIN, LOW);
 
 }

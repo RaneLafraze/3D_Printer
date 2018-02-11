@@ -30,7 +30,7 @@ public:
 
 	// Where line is the line the command was found on (includes parameters)
 	virtual void execute(String line);
-	virtual void update(); // Should be called in a loop
+	virtual void update(long delta); // Should be called in a loop
 
 	// Get / Set methods
 	String getName()
