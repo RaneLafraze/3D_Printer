@@ -15,8 +15,11 @@ public:
 	// http://stackoverflow.com/questions/14116003/difference-between-constexpr-and-const
 	static constexpr double MM_PER_STEP = 0.3; // mm. moved in 1 step
 	static constexpr double IN_PER_STEP = 0.1; // in. moved in 1 step
+	// TODO: \/ Remove these variables as they can be obtained from the ones above
 	static constexpr double STEP_PER_MM = 3.0; // steps moved in 1 mm
 	static constexpr double STEP_PER_IN = 10.0; // steps moved in 1 in
+
+	static int MIN_STEPPER_DELAY = 300; // Min. delay in microseconds to turn
 
 	// Is (0, 0) in the center of the build plate?
 	// If not, it is in the corner
