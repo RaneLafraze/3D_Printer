@@ -24,12 +24,14 @@ public:
 	// Get / Set methods
 	String getGcode();
 	void setGcode(String arg_gcode);
+	Axis* getAxis(char axisChar);
 
 private:
-	// End stop pin, stepper pin, stepper type
+	// End stop pin, stepper pin
 	Axis xAxis = Axis(2, 3);
 	Axis yAxis = Axis(7, 8);
 	Axis zAxis = Axis(12, 13);
+	Axis eAxis = Axis(17, 18); // Extruder
 
 	String gcode;
 

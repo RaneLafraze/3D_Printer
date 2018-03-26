@@ -115,20 +115,56 @@ void Machine::parseGcode(int lineCount, int offset)
 
 /**
  * Generates and returns a double array defining the position of
- * the head on the machine (x, y, z).
+ * the head on the machine (x, y, z), as well as the extruder
+ * position.
  *
  * @return
- * A pointer to the double array of the 3 axis positions.
+ * A pointer to the double array of the 4 axis positions.
  */
 double* Machine::getPosition()
 {
-	double pos[3];
+	double pos[4];
 
 	pos[0] = xAxis.getPosition();
 	pos[1] = yAxis.getPosition();
 	pos[2] = zAxis.getPosition();
+	pos[3] = eAxis.getPosition();
 
 	return pos;
+}
+
+/**
+ * Returns the axis that has the identifier of the given character.
+ * i.e. X-axis has an identifier of 'x'. This method should be used
+ * when manipulating or measuring values from an axis.
+ *
+ * @param axisChar
+ * the character of the desired axis (x, y, z, e)
+ *
+ * @return
+ * A pointer to the desired axis.
+ */
+Axis* Machine::getAxis(char axisChar)
+{
+
+	axisChar = toLowerCase(axisChar);
+	if(axisChar == 'x')
+	{
+		return &xAxis;
+	} else if(axisChar == 'y')
+	{
+		return &yAxis;
+	} else if(axisChar == 'z')
+	{
+		return &zAxis;
+	} else if(axisChar == 'e')
+	{
+		return &eAxis;
+	} else
+	{
+		return 0;
+	}
+
 }
 
 /**
