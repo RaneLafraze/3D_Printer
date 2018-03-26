@@ -10,8 +10,8 @@ public:
 	StepMotor(int arg_pin);
 	virtual ~StepMotor();
 
-	void move(int steps, int time);
-	void move(int steps);
+	void move(int steps, int time = -1);
+	//void move(int steps);
 	void step(int direction);
 
 private:

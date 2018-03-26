@@ -1,6 +1,7 @@
 #include "StepMotor.h"
 
 #include "Global.h"
+#include "Configuration.h"
 
 /**
  * Used as the base object for the machine. It is a Stepper Motor
@@ -77,23 +78,33 @@ StepMotor::~StepMotor()
 
 /*
  * This will move the stepper motor shaft with the
- * given number of steps. NOTE: This method does
- * not have a built in delay, so it is not
- * recommenced to be used with large step values.
- * Instead, use  move(steps, time)
+ * given number of steps. NOTE: By default, this method
+ * does not have a built in delay. It is HIGHLY recommended
+ * that a integer greater than 300 is passed in to the second
+ * parameter.
  *
  * @param steps
  * the number of steps to move
+ * @param time
+ * default = -1. Delay in microseconds, should be greater than 300.
+ * If left at -1, it will be set to the fastest step speed (lowest
+ * delay)
  */
-void StepMotor::move(int steps)
+void StepMotor::move(int steps, int time = -1)
 {
 	int direction = steps / abs(steps);
+
+	if(time == -1)
+	{
+		time = Configuration::MIN_STEPPER_DELAY;
+	}
 
 	if (direction != 0)
 	{
 		for (int s = 0; s < abs(steps); s++)
 		{
 			step(direction);
+			delayMicroseconds(time);
 		}
 	}
 }
@@ -110,6 +121,7 @@ void StepMotor::move(int steps)
 void StepMotor::step(int direction)
 {
 
+	// TODO: Make sure these direction values are correct
 	if(direction == 1)
 	{
 		digitalWrite(PIN + 1, HIGH);
@@ -122,9 +134,8 @@ void StepMotor::step(int direction)
 		return;
 	}
 
-	// TODO: See if this delay is too fast or too slow
 	digitalWrite(PIN, HIGH);
-	delayMicroseconds(500); // Fastest delay for Arduino
+	delayMicroseconds(Configuration::MIN_STEPPER_DELAY); // Fastest delay for Arduino
 	digitalWrite(PIN, LOW);
 
 }
