@@ -80,7 +80,8 @@ void Axis::moveAxis(double targetPos, int speed)
  */
 bool Axis::readEndStopPin()
 {
-	if(digitalRead(endStopPin) == HIGH) {
+	// End stops are enabled when low
+	if(digitalRead(endStopPin) == LOW) {
 		return true;
 	} else
 	{
