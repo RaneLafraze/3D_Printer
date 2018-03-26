@@ -19,7 +19,7 @@ public:
 	static constexpr double STEP_PER_MM = 3.0; // steps moved in 1 mm
 	static constexpr double STEP_PER_IN = 10.0; // steps moved in 1 in
 
-	static int MIN_STEPPER_DELAY = 300; // Min. delay in microseconds to turn
+	static constexpr int MIN_STEPPER_DELAY = 300; // Min. delay in microseconds to turn
 
 	// Is (0, 0) in the center of the build plate?
 	// If not, it is in the corner
