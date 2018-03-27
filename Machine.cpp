@@ -123,7 +123,7 @@ void Machine::parseGcode(int lineCount, int offset)
  */
 double* Machine::getPosition()
 {
-	double pos[4];
+	double *pos = new double[4];
 
 	pos[0] = xAxis.getPosition();
 	pos[1] = yAxis.getPosition();
@@ -131,6 +131,8 @@ double* Machine::getPosition()
 	pos[3] = eAxis.getPosition();
 
 	return pos;
+
+	//return pos;
 }
 
 /**
@@ -175,8 +177,8 @@ Axis* Machine::getAxis(char axisChar)
 String Machine::removeComments(String raw)
 {
 
-	size_t commentIndex = 0;
-	size_t endIndex = 0;
+	int commentIndex = 0;
+	int endIndex = 0;
 
 	while(commentIndex != -1)
 	{
