@@ -16,8 +16,8 @@ public:
 	Axis(int arg_endStopPin, int arg_stepperPin);
 	virtual ~Axis();
 
-	void moveAxis(double targetPos);
-	void moveAxis(double targetPos, int speed);
+	void moveAxis(double targetPos, int speed = -1);
+	void moveOneStep(int direction, int delay = 0);
 
 	bool readEndStopPin();
 
