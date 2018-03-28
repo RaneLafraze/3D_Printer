@@ -25,6 +25,8 @@ public:
 	String getGcode();
 	void setGcode(String arg_gcode);
 	Axis* getAxis(char axisChar);
+	double getFeedrate();
+	void setFeedrate(double arg_feedrate);
 
 private:
 	// End stop pin, stepper pin
@@ -32,6 +34,7 @@ private:
 	Axis yAxis = Axis(7, 8);
 	Axis zAxis = Axis(12, 13);
 	Axis eAxis = Axis(17, 18); // Extruder
+	double feedrate = Configuration::MAX_FEEDRATE; // unit/min
 
 	String gcode;
 

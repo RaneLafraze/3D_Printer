@@ -213,3 +213,12 @@ void Machine::setGcode(String arg_gcode)
 	gcode = arg_gcode;
 }
 
+double Machine::getFeedrate()
+{
+	return feedrate;
+}
+void Machine::setFeedrate(double arg_feedrate)
+{
+	feedrate = arg_feedrate;
+}
+
