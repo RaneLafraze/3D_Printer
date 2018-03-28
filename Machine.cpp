@@ -1,6 +1,8 @@
 #include "Machine.h"
 #include "commands/CommandBase.hpp"
+#include "Utility.hpp"
 #include "Global.h"
+#include "Configuration.h"
 
 Machine::Machine()
 {
@@ -125,10 +127,10 @@ double* Machine::getPosition()
 {
 	double *pos = new double[4];
 
-	pos[0] = xAxis.getPosition();
-	pos[1] = yAxis.getPosition();
-	pos[2] = zAxis.getPosition();
-	pos[3] = eAxis.getPosition();
+	pos[0] = Utility::roundToPlace(xAxis.getPosition(), Configuration::PRECISION);
+	pos[1] = Utility::roundToPlace(yAxis.getPosition(), Configuration::PRECISION);
+	pos[2] = Utility::roundToPlace(zAxis.getPosition(), Configuration::PRECISION);
+	pos[3] = Utility::roundToPlace(eAxis.getPosition(), Configuration::PRECISION);
 
 	return pos;
 
@@ -149,17 +151,17 @@ double* Machine::getPosition()
 Axis* Machine::getAxis(char axisChar)
 {
 
-	axisChar = toLowerCase(axisChar);
-	if(axisChar == 'x')
+	axisChar = toUpperCase(axisChar);
+	if(axisChar == 'X')
 	{
 		return &xAxis;
-	} else if(axisChar == 'y')
+	} else if(axisChar == 'Y')
 	{
 		return &yAxis;
-	} else if(axisChar == 'z')
+	} else if(axisChar == 'Z')
 	{
 		return &zAxis;
-	} else if(axisChar == 'e')
+	} else if(axisChar == 'E')
 	{
 		return &eAxis;
 	} else
