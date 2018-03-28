@@ -90,7 +90,7 @@ StepMotor::~StepMotor()
  * If left at -1, it will be set to the fastest step speed (lowest
  * delay)
  */
-void StepMotor::move(int steps, int time = -1)
+void StepMotor::move(int steps, int time)
 {
 	int direction = steps / abs(steps);
 
