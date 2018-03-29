@@ -29,8 +29,10 @@ public:
 	//virtual void execute() = 0;
 
 	// Where line is the line the command was found on (includes parameters)
-	virtual void execute(String line);
-	virtual void update(long delta); // Should be called in a loop
+	virtual void execute(String line) { };
+	virtual void update(long delta) { }; // Should be called in a loop
+	// ^ Have to be implemented to avoid vtable error
+
 
 	// Get / Set methods
 	String getName()

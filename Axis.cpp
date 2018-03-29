@@ -25,6 +25,11 @@ Axis::Axis(int arg_stepperPin, int arg_dirPin, int arg_endStopPin)
 	maxSpeedIN = round((maxSpeedIN * 1000) / Configuration::STEP_PER_IN);
 }
 
+Axis::~Axis()
+{
+
+}
+
 ///**
 // * Moves this axis as fast as possible to the target
 // * position.
