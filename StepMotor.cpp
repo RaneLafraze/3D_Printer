@@ -8,16 +8,25 @@
  * object constructed around the A4988 Driver. The integer provided
  * corresponds to the pin that will control the stepping of the motor.
  * The pin above that (pin + 1) will control the direction of the stepper
- * motor.
+ * motor if the second parameter is not passed in.
  *
- * @param pin
+ * @param arg_stepPin
  * the pin for the step control
+ * @param arg_dirPin
+ * default = -1. The pin to control direction; will be set to arg_stepPin + 1
+ * if left at default
  */
-StepMotor::StepMotor(int arg_pin) : PIN(arg_pin)
+StepMotor::StepMotor(int arg_stepPin, int arg_dirPin)// : STEP_PIN(arg_stepPin)
 {	
+	STEP_PIN = arg_stepPin;
+	if(arg_dirPin == -1) // If it was left at default, assign it
+	{
+		arg_dirPin = STEP_PIN + 1;
+	}
+	DIR_PIN = arg_dirPin;
 	
-	pinMode(PIN, OUTPUT); // Step control
-	pinMode(PIN + 1, OUTPUT); // Direction
+	pinMode(STEP_PIN, OUTPUT); // Step control
+	pinMode(DIR_PIN, OUTPUT); // Direction
 
 }
 
@@ -124,19 +133,19 @@ void StepMotor::step(int direction)
 	// TODO: Make sure these direction values are correct
 	if(direction == 1)
 	{
-		digitalWrite(PIN + 1, HIGH);
+		digitalWrite(DIR_PIN, HIGH);
 	} else if(direction == -1)
 	{
-		digitalWrite(PIN + 1, LOW);
+		digitalWrite(DIR_PIN, LOW);
 	} else
 	{
 		// direction is invalid, so exit
 		return;
 	}
 
-	digitalWrite(PIN, HIGH);
+	digitalWrite(STEP_PIN, HIGH);
 	delayMicroseconds(Configuration::MIN_STEPPER_DELAY); // Fastest delay for Arduino
-	digitalWrite(PIN, LOW);
+	digitalWrite(STEP_PIN, LOW);
 
 }
 
@@ -151,7 +160,7 @@ void StepMotor::step(int direction)
 String StepMotor::getStepperId()
 {
 	String id = "stepper-";
-	id.concat(PIN);
+	id.concat(STEP_PIN);
 	return id;
 }
 

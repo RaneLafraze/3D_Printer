@@ -7,7 +7,7 @@
 class StepMotor
 {
 public:
-	StepMotor(int arg_pin);
+	StepMotor(int arg_stepPin, int arg_dirPin = -1);
 	virtual ~StepMotor();
 
 	void move(int steps, int time = -1);
@@ -16,7 +16,8 @@ public:
 
 private:
 
-	const int PIN;
+	const int STEP_PIN;
+	const int DIR_PIN;
 
 	// Returns "stepper-PIN" where PIN is the starting pin
 	String getStepperId();
