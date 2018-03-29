@@ -173,7 +173,10 @@ void G1::execute(String line)
 		}
 	}
 
-	startPos = currentPos; // Save current positions
+	for(int p = 0; p < 4; p++)
+	{
+		startPos[p] = currentPos[p];
+	}
 	startTime = millis();
 	isRunning = true;
 
