@@ -2,7 +2,6 @@
 #include "commands/CommandBase.hpp"
 #include "Utility.hpp"
 #include "Global.h"
-#include "Configuration.h"
 
 Machine::Machine()
 {

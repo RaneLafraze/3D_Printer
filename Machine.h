@@ -3,6 +3,7 @@
 
 //#include "commands/CommandBase.hpp"
 #include "Axis.h"
+#include "Configuration.h"
 
 #include <deque>
 #include "Arduino.h"
