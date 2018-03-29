@@ -7,23 +7,14 @@
  * Used as the base object for the machine. It is a Stepper Motor
  * object constructed around the A4988 Driver. The integer provided
  * corresponds to the pin that will control the stepping of the motor.
- * The pin above that (pin + 1) will control the direction of the stepper
- * motor if the second parameter is not passed in.
  *
  * @param arg_stepPin
  * the pin for the step control
  * @param arg_dirPin
- * default = -1. The pin to control direction; will be set to arg_stepPin + 1
- * if left at default
+ * the pin to control direction
  */
-StepMotor::StepMotor(int arg_stepPin, int arg_dirPin)// : STEP_PIN(arg_stepPin)
+StepMotor::StepMotor(int arg_stepPin, int arg_dirPin) : STEP_PIN(arg_stepPin), DIR_PIN(arg_dirPin)
 {	
-	STEP_PIN = arg_stepPin;
-	if(arg_dirPin == -1) // If it was left at default, assign it
-	{
-		arg_dirPin = STEP_PIN + 1;
-	}
-	DIR_PIN = arg_dirPin;
 	
 	pinMode(STEP_PIN, OUTPUT); // Step control
 	pinMode(DIR_PIN, OUTPUT); // Direction
