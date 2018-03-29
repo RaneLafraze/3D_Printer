@@ -11,6 +11,27 @@ public:
 	// millimeters or inches
 	enum unitEnum {MM, IN};
 
+	// Pin assignments
+	// --X--
+	static const int X_STEP_PIN = 3;
+	static const int X_DIR_PIN = 4;
+	static const int X_SWITCH = 5; // Endstop pin
+
+	// --Y--
+	static const int Y_STEP_PIN = 6;
+	static const int Y_DIR_PIN = 7;
+	static const int Y_SWITCH = 8;
+
+	// --Z--
+	static const int Z_STEP_PIN = 9;
+	static const int Z_DIR_PIN = 10;
+	static const int Z_SWITCH = 11;
+
+	// --Extruder--
+	static const int E_STEP_PIN = 12;
+	static const int E_DIR_PIN = 13;
+	static const int E_SWITCH = 0; // Filament detector
+
 	// Useful formulas:    delay(ms) = 1000ms / (mm * steps)
 	// NEMA steps=200      mm = 1000ms / (delay(ms) * steps)
 
