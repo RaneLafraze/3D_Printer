@@ -1,7 +1,7 @@
 #include "Axis.h"
 
 
-Axis::Axis(int arg_endStopPin, StepMotor* arg_axisMotor)
+Axis::Axis(StepMotor* arg_axisMotor, int arg_endStopPin)
 {
 	axisMotor = arg_axisMotor;
 	endStopPin = arg_endStopPin;
@@ -15,9 +15,9 @@ Axis::Axis(int arg_endStopPin, StepMotor* arg_axisMotor)
 	maxSpeedIN = round((maxSpeedIN * 1000) / Configuration::STEP_PER_IN);
 }
 
-Axis::Axis(int arg_endStopPin, int arg_stepperPin)
+Axis::Axis(int arg_stepperPin, int arg_dirPin, int arg_endStopPin)
 {
-	axisMotor = new StepMotor(arg_stepperPin);
+	axisMotor = new StepMotor(arg_stepperPin, arg_dirPin);
 	endStopPin = arg_endStopPin;
 
 	pinMode(endStopPin, INPUT);

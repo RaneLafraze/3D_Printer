@@ -12,8 +12,8 @@ class Axis
 {
 public:
 
-	Axis(int arg_endStopPin, StepMotor* arg_axisMotor);
-	Axis(int arg_endStopPin, int arg_stepperPin);
+	Axis(StepMotor* arg_axisMotor, int arg_endStopPin);
+	Axis(int arg_stepperPin, int arg_dirPin, int arg_endStopPin);
 	virtual ~Axis();
 
 	void moveAxis(double targetPos, int speed = -1);
