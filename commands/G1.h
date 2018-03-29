@@ -20,8 +20,16 @@ public:
 	void execute(String line) override; // Override from CommandBase
 	void update(long delta) override;
 
+
 private:
-	double targetPos[3];
+	Axis* getAxisByNum(int num);
+
+	double startPos[4]; // 0->X, 1->Y, 2->Z, 3->E
+	double targetPos[4];
+	bool checkEndstop = false;
+
+	double incrementDelays[4]; // In microseconds
+	unsigned long startTime = 0.0;
 
 };
 
