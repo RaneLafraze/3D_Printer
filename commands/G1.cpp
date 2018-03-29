@@ -115,7 +115,7 @@ void G1::execute(String line)
 			targetPos[a] = currentPos[a];
 		}
 
-	}
+	} // End of for loop
 
 	/*
 	 * A note about feedrate; RepRap states that, in a G1 command, the F
@@ -215,10 +215,10 @@ void G1::update(long delta)
 			// Move the axis toward the target
 			if(currentPos[a] < targetPos[a])
 			{
-				getAxisByNum(a)->moveOneStep(1);
+				getAxisByNum(a)->moveOneStep(1, 1000);
 			} else if(currentPos[a] > targetPos[a])
 			{
-				getAxisByNum(a)->moveOneStep(-1);
+				getAxisByNum(a)->moveOneStep(-1, 1000);
 			}  else // Increment the finish count because the goal was met
 			{
 				finishedCount++;
@@ -229,7 +229,9 @@ void G1::update(long delta)
 	if(finishedCount == 4) // If all axis have finished
 	{
 		isRunning = false;
+		Serial.println("G1 Command finished!");
 	}
+	//Serial.println("Updating...");
 
 }
 

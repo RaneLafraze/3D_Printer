@@ -52,13 +52,13 @@ public:
 
 	// Is (0, 0) in the center of the build plate?
 	// If not, it is in the corner
-	static const bool BUILD_CENTERED = false;
-	static const int BUILD_WIDTH_MM = 400;
-	static const int BUILD_LENGTH_MM = 400;
-	static const int BUILD_HEIGHT_MM = 400;
-	static const int BUILD_WIDTH_IN = 200;
-	static const int BUILD_LENGTH_IN = 200;
-	static const int BUILD_HEIGHT_IN = 200;
+//	static const bool BUILD_CENTERED = false;
+//	static const int BUILD_WIDTH_MM = 400;
+//	static const int BUILD_LENGTH_MM = 400;
+//	static const int BUILD_HEIGHT_MM = 400;
+//	static const int BUILD_WIDTH_IN = 200;
+//	static const int BUILD_LENGTH_IN = 200;
+//	static const int BUILD_HEIGHT_IN = 200;
 
 };
 

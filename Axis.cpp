@@ -13,6 +13,7 @@ Axis::Axis(StepMotor* arg_axisMotor, int arg_endStopPin)
 	// between steps
 	maxSpeedMM = round((maxSpeedMM * 1000) / Configuration::STEP_PER_MM);
 	maxSpeedIN = round((maxSpeedIN * 1000) / Configuration::STEP_PER_IN);
+
 }
 
 Axis::Axis(int arg_stepperPin, int arg_dirPin, int arg_endStopPin)
@@ -23,6 +24,7 @@ Axis::Axis(int arg_stepperPin, int arg_dirPin, int arg_endStopPin)
 	pinMode(endStopPin, INPUT);
 	maxSpeedMM = round((maxSpeedMM * 1000) / Configuration::STEP_PER_MM);
 	maxSpeedIN = round((maxSpeedIN * 1000) / Configuration::STEP_PER_IN);
+
 }
 
 Axis::~Axis()
@@ -103,20 +105,34 @@ void Axis::moveAxis(double targetPos, int speed)
  *
  * @param direction
  * the direction to step
- * @param delay
+ * @param usDelay
  * default = 0. The delay in microseconds after the step
  */
-void Axis::moveOneStep(int direction, int delay)
+void Axis::moveOneStep(int direction, int usDelay)
 {
+
 	axisMotor->step(direction);
-	delayMicroseconds(delay);
+	if(usDelay > 16000) // Max delay for microseconds
+	{
+		delay(usDelay / 1000); // Delay milliseconds instead
+	} else
+	{
+		delayMicroseconds(usDelay);
+	}
 
 	if(units == Configuration::MM)
 	{
-		position = position + Configuration::MM_PER_STEP;
+		// * direction to support positive or negative changes
+		position = position + (Configuration::MM_PER_STEP * direction);
 	} else if(units == Configuration::IN) {
-		position = position + Configuration::IN_PER_STEP;
+		position = position + (Configuration::IN_PER_STEP * direction);
 	}
+
+//	Serial.print(endStopPin);
+//	Serial.print(" position=");
+//	Serial.println(position);
+//	Serial.println();
+
 }
 
 /**
@@ -143,6 +159,7 @@ bool Axis::readEndStopPin()
 void Axis::setPosition(double newPosition)
 {
 	position = newPosition;
+	Serial.println("SET");
 }
 double Axis::getPosition()
 {

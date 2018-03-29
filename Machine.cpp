@@ -3,7 +3,11 @@
 #include "Utility.hpp"
 #include "Global.h"
 
-Machine::Machine()
+Machine::Machine() : // Best way to declare objects
+	xAxis(Configuration::X_STEP_PIN, Configuration::X_DIR_PIN, Configuration::X_SWITCH),
+	yAxis(Configuration::Y_STEP_PIN, Configuration::Y_DIR_PIN, Configuration::Y_SWITCH),
+	zAxis(Configuration::Z_STEP_PIN, Configuration::Z_DIR_PIN, Configuration::Z_SWITCH),
+	eAxis(Configuration::E_STEP_PIN, Configuration::E_DIR_PIN, Configuration::E_SWITCH)
 {
 
 	gcode = "";

@@ -19,6 +19,7 @@ private:
 	const int STEP_PIN;
 	const int DIR_PIN;
 
+public:
 	// Returns "stepper-PIN" where PIN is the starting pin
 	String getStepperId();
 };
