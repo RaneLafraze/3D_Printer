@@ -20,12 +20,12 @@ class CommandBase
 public:
 	CommandBase() { }
 	CommandBase(String arg_name, String arg_tag, Machine *arg_machine)
-			: name(arg_name), tag(arg_tag), machine(arg_machine) { }
+			: name(arg_name), tag(arg_tag), machine(arg_machine) { };
 	CommandBase(String arg_tag, Machine *arg_machine)
-			: name(arg_tag), tag(arg_tag), machine(arg_machine) { }
+			: name(arg_tag), tag(arg_tag), machine(arg_machine) { };
 	// Name isn't given, so give it the tag value
 
-	virtual ~CommandBase() { }
+	virtual ~CommandBase() { };
 	//virtual void execute() = 0;
 
 	// Where line is the line the command was found on (includes parameters)

@@ -14,9 +14,11 @@ G1::G1(String arg_tag, Machine *arg_machine) : CommandBase(arg_tag, arg_machine)
 	name = "G1";
 }
 
-G1::~G1() {
+G1::~G1()
+{
 
 }
+
 
 /**
  * This will run this command. It will perform the operations within
