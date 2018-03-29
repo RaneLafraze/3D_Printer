@@ -30,10 +30,11 @@ public:
 
 private:
 	// End stop pin, stepper pin
-	Axis xAxis = Axis(2, 3);
-	Axis yAxis = Axis(7, 8);
-	Axis zAxis = Axis(12, 13);
-	Axis eAxis = Axis(17, 18); // Extruder
+	Axis xAxis = Axis(Configuration::X_STEP_PIN, Configuration::X_DIR_PIN, Configuration::X_SWITCH);
+	Axis yAxis = Axis(Configuration::Y_STEP_PIN, Configuration::Y_DIR_PIN, Configuration::Y_SWITCH);
+	Axis zAxis = Axis(Configuration::Z_STEP_PIN, Configuration::Z_DIR_PIN, Configuration::Z_SWITCH);
+	// Extruder:
+	Axis eAxis = Axis(Configuration::E_STEP_PIN, Configuration::E_DIR_PIN, Configuration::E_SWITCH);
 	double feedrate = Configuration::MAX_FEEDRATE; // unit/min
 
 	String gcode;
