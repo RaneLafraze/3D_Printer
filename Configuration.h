@@ -45,7 +45,7 @@ public:
 	// TODO: \/ Remove these variables as they can be obtained from the ones above
 	static constexpr double STEP_PER_MM = 200.0; // steps moved in 1 mm
 	static constexpr double STEP_PER_IN = 5080.0; // steps moved in 1 in
-	static constexpr double PRECISION = 1000.0; // Maximum accuracy
+	static constexpr int PRECISION = 1000; // Maximum accuracy
 
 	static constexpr int MIN_STEPPER_DELAY = 300; // Min. delay in microseconds to turn
 	static constexpr int MAX_FEEDRATE = 500; // 8.3mm/s * 60
