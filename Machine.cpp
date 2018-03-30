@@ -121,23 +121,41 @@ void Machine::parseGcode(int lineCount, int offset)
 /**
  * Generates and returns a double array defining the position of
  * the head on the machine (x, y, z), as well as the extruder
- * position.
+ * position. If an invalid axis is given, this method will
+ * return a value of 0.0.
+ *
+ * @param axis
+ * the axis requested (0-X, 1-Y, 2-Z, 3-Extruder)
  *
  * @return
- * A pointer to the double array of the 4 axis positions.
+ * The position of the axis corresponding to the given number.
  */
-double* Machine::getPosition()
+double Machine::getPosition(short axis)
 {
-	double *pos = new double[4];
-
-	pos[0] = Utility::roundToPlace(xAxis.getPosition(), Configuration::PRECISION);
-	pos[1] = Utility::roundToPlace(yAxis.getPosition(), Configuration::PRECISION);
-	pos[2] = Utility::roundToPlace(zAxis.getPosition(), Configuration::PRECISION);
-	pos[3] = Utility::roundToPlace(eAxis.getPosition(), Configuration::PRECISION);
-
-	return pos;
-
-	//return pos;
+	if(axis == 0)
+	{
+		return Utility::roundToPlace(xAxis.getPosition(), Configuration::PRECISION);
+	} else if(axis == 1)
+	{
+		return Utility::roundToPlace(yAxis.getPosition(), Configuration::PRECISION);
+	} else if(axis == 2)
+	{
+		return Utility::roundToPlace(zAxis.getPosition(), Configuration::PRECISION);
+	} else if(axis == 3)
+	{
+		return Utility::roundToPlace(eAxis.getPosition(), Configuration::PRECISION);
+	} else
+	{
+		return 0.0;
+	}
+//	double pos[4];
+//
+//	pos[0] = Utility::roundToPlace(xAxis.getPosition(), Configuration::PRECISION);
+//	pos[1] = Utility::roundToPlace(yAxis.getPosition(), Configuration::PRECISION);
+//	pos[2] = Utility::roundToPlace(zAxis.getPosition(), Configuration::PRECISION);
+//	pos[3] = Utility::roundToPlace(eAxis.getPosition(), Configuration::PRECISION);
+//
+//	return pos;
 }
 
 /**

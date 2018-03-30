@@ -28,18 +28,27 @@ G1::~G1()
  */
 void G1::execute(String line)
 {
-	double *currentPos = machine->getPosition();
-//	double maxTravel = 0.0; // ??
+	// 28 bytes total:
+	//double *currentPos = machine->getPosition(); // Large memory!!
 	std::map<char, double> parameters;
 	double feedrate = Configuration::MAX_FEEDRATE; // Speed: units/mn
 
-	char identifier = 'x';
+	// 2 bytes
+	char identifier = 'X';
 	double value = 0.0;
 	size_t spaceIndex = line.indexOf(" "); // Acts as the "cursor"
 	String part = "";
 
+	// 2 bytes
 	double largestMove = 0.0;
 	char largestAxis = 'X';
+
+	// Store current position into the move's start position
+	// startPos[] takes the place of currentPos[]
+	for(short s = 0; s < 4; s++)
+	{
+		startPos[s] = machine->getPosition(s);
+	}
 
 	// Validate
 	if(line.indexOf(tag) == -1)
@@ -58,9 +67,14 @@ void G1::execute(String line)
 		if(line.indexOf(" ", spaceIndex + 1))
 		{
 			part = line.substring(spaceIndex + 1, line.indexOf(" ", spaceIndex + 1));
-		} else // Otherwise use the \n character to finish
+		} else if(line.indexOf("\n", spaceIndex + 1))
 		{
+			// Otherwise use the \n character to finish
 			part = line.substring(spaceIndex, line.indexOf("\n"));
+		} else
+		{
+			// All else fails, use the length of part
+			part = line.substring(spaceIndex, part.length());
 		}
 
 		if(part.length() > 0)
@@ -105,14 +119,14 @@ void G1::execute(String line)
 			targetPos[a] = Utility::roundToPlace(parameters.find(id)->second, 1000);
 
 			// Update largest move
-			if(Utility::absFixed(currentPos[a] - targetPos[a]) > largestMove)
+			if(Utility::absFixed(startPos[a] - targetPos[a]) > largestMove)
 			{
-				largestMove = Utility::absFixed(currentPos[a] - targetPos[a]);
+				largestMove = Utility::absFixed(startPos[a] - targetPos[a]);
 				largestAxis = id;
 			}
 		} else
 		{
-			targetPos[a] = currentPos[a];
+			targetPos[a] = startPos[a];
 		}
 
 	} // End of for loop
@@ -165,20 +179,16 @@ void G1::execute(String line)
 	for(int a = 0; a < 4; a++) // 4 axis
 	{
 		// Make sure it's not 0, which would lead to a divide error
-		if((currentPos[a] - targetPos[a]) != 0)
+		if((startPos[a] - targetPos[a]) != 0)
 		{
 			// TODO: Make sure abs() doesn't cause rounding problems
-			incrementDelays[a] = moveTime / Utility::absFixed(currentPos[a] - targetPos[a]) / 200;
+			incrementDelays[a] = moveTime / Utility::absFixed(startPos[a] - targetPos[a]) / 200;
 		} else
 		{
 			incrementDelays[a] = 0.0;
 		}
 	}
 
-	for(int p = 0; p < 4; p++)
-	{
-		startPos[p] = currentPos[p];
-	}
 	startTime = millis();
 	isRunning = true;
 
@@ -194,9 +204,17 @@ void G1::execute(String line)
  */
 void G1::update(long delta)
 {
-	double *currentPos = machine->getPosition();
+	//double *currentPos = machine->getPosition();
+	double currentPos[4];
 	unsigned long currentTime = millis();
 	int finishedCount = 0;
+
+	// Get the current position
+	for(int p = 0; p < 4; p++)
+	{
+		currentPos[p] = machine->getPosition(p);
+	}
+
 
 	// Move the axis if they haven't reached the target destination yet
 	for(int a = 0; a < 4; a++)
@@ -215,23 +233,33 @@ void G1::update(long delta)
 			// Move the axis toward the target
 			if(currentPos[a] < targetPos[a])
 			{
-				getAxisByNum(a)->moveOneStep(1, 1000);
+				getAxisByNum(a)->moveOneStep(1);
 			} else if(currentPos[a] > targetPos[a])
 			{
-				getAxisByNum(a)->moveOneStep(-1, 1000);
+				getAxisByNum(a)->moveOneStep(-1);
 			}  else // Increment the finish count because the goal was met
 			{
 				finishedCount++;
 			}
+
+//			Serial.print(F("position="));
+//			Serial.println(currentPos[0]);
+
 		} // End of time if statement
 	}
 
 	if(finishedCount == 4) // If all axis have finished
 	{
 		isRunning = false;
-		Serial.println("G1 Command finished!");
+		Serial.print(F("G1 Command finished! "));
+		Serial.print(currentPos[0]);
+		Serial.print(" ");
+		Serial.print(currentPos[1]);
+		Serial.print(" ");
+		Serial.print(currentPos[2]);
+		Serial.print(" ");
+		Serial.println(currentPos[3]);
 	}
-	//Serial.println("Updating...");
 
 }
 

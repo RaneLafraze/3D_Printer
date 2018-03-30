@@ -112,13 +112,14 @@ void Axis::moveOneStep(int direction, int usDelay)
 {
 
 	axisMotor->step(direction);
-	if(usDelay > 16000) // Max delay for microseconds
-	{
-		delay(usDelay / 1000); // Delay milliseconds instead
-	} else
-	{
-		delayMicroseconds(usDelay);
-	}
+	delayMicroseconds(usDelay);
+//	if(usDelay > 16000) // Max delay for microseconds
+//	{
+//		delay(usDelay / 1000); // Delay milliseconds instead
+//	} else
+//	{
+//		delayMicroseconds(usDelay);
+//	}
 
 	if(units == Configuration::MM)
 	{

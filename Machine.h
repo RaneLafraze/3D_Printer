@@ -20,7 +20,7 @@ public:
 	void parseGcode(int lineCount, int offset);
 	void parseGcode(); // Creates commands for ALL gcode instruction
 
-	double* getPosition();
+	double getPosition(short axis);
 
 	// Get / Set methods
 	String getGcode();
