@@ -12,20 +12,20 @@ public:
 	/**
 	 * Rounds the given number to the place value provided.
 	 * Examples:  (1.234, 100) --> 1.23
-	 *            (465.4, 0.01) -> 5.00
+	 *            (8.7, 10)    --> 9
 	 *
 	 * @param num
 	 * the number to round
 	 * @param place
-	 * a multiple of 10, which will be multiplied by the number to
-	 * achieve the desired rounding.
+	 * an integer that is a multiple of 10, which will be
+	 *  multiplied by the number to achieve the desired rounding
 	 *
 	 * @return
 	 * The rounded number.
 	 */
 	static double roundToPlace(double num, int place)
 	{
-		return round(num * place) / place;
+		return round(num * place) / (double) place;
 	}
 
 	/**
