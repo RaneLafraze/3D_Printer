@@ -3,6 +3,7 @@
 
 #include "Arduino.h"
 
+// STEPPER current limit: 1,200 mV
 
 // Define ports / connections in this class
 class Configuration
@@ -37,6 +38,8 @@ public:
 
 	// With minimum delay of 300 microseconds (600 total)
 	// Max speed = 8.3 mm/s   0.327 in/s
+	// With minimum delay of 400 microseconds (800 total)
+	// Max speed = 6.25 mm/s   0.246 in/s
 
 	// constexpr info:
 	// http://stackoverflow.com/questions/14116003/difference-between-constexpr-and-const
@@ -47,8 +50,8 @@ public:
 	static constexpr double STEP_PER_IN = 5080.0; // steps moved in 1 in
 	static constexpr int PRECISION = 1000; // Maximum accuracy
 
-	static constexpr int MIN_STEPPER_DELAY = 300; // Min. delay in microseconds to turn
-	static constexpr int MAX_FEEDRATE = 500; // 8.3mm/s * 60
+	static constexpr int MIN_STEPPER_DELAY = 400; // Min. delay in microseconds to turn
+	static constexpr int MAX_FEEDRATE = 375; // 8.3mm/s * 60   6.25mm/2 * 60
 
 	// Is (0, 0) in the center of the build plate?
 	// If not, it is in the corner
