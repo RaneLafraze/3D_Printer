@@ -10,19 +10,23 @@
  *
  */
 
+// STEPPER current limit: 1,200 mV
+
 void checkMem();
 int freeMemory();
-
+//
 // Variables
 Machine machine = Machine();
 G1 g1Command = G1("G1", "G1", &machine);
 
+long lastUpdate = 0;
 
 void setup()
 {
 
-	Serial.begin(9600);
-	Serial.println("Machine initialized! Awaiting command...");
+	Serial.begin(250000);
+	Serial.println(F("Machine initialized! Awaiting command..."));
+	lastUpdate = micros();
 }
 
 void loop()
@@ -53,12 +57,19 @@ void loop()
 	} else
 	{
 		g1Command.update(0.0);
+		//Serial.println((micros() - lastUpdate));
 	}
 
-#if defined(ARDUINO_AVR_MEGA2560)
 	checkMem();
-#endif
-	//delay(1); // For stability(may not be needed)
+	//delay(1); // For stability (may not be needed)
+
+	//Serial.print(F("d=")); // Causes about a 2 ms delay!
+//	if(micros() - lastUpdate > 500)
+//	{
+//		Serial.println((micros() - lastUpdate));
+//	}
+	lastUpdate = micros();
+
 }
 
 void checkMem()
