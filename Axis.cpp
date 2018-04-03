@@ -112,8 +112,7 @@ void Axis::moveOneStep(int direction, int usDelay)
 {
 
 	axisMotor->step(direction);
-	delayMicroseconds(usDelay);
-//	if(usDelay > 16000) // Max delay for microseconds
+//	if(usDelay > 2000) // Max delay for microseconds
 //	{
 //		delay(usDelay / 1000); // Delay milliseconds instead
 //	} else
@@ -121,18 +120,20 @@ void Axis::moveOneStep(int direction, int usDelay)
 //		delayMicroseconds(usDelay);
 //	}
 
+	// Multiply to avoid arithmetic errors
+	position = position * Configuration::PRECISION;
 	if(units == Configuration::MM)
 	{
 		// * direction to support positive or negative changes
-		position = position + (Configuration::MM_PER_STEP * direction);
+		position = position + (Configuration::MM_PER_STEP * direction * Configuration::PRECISION);
 	} else if(units == Configuration::IN) {
-		position = position + (Configuration::IN_PER_STEP * direction);
+		position = position + (Configuration::IN_PER_STEP * direction * Configuration::PRECISION);
 	}
+	// And convert back to double number
+	position = position / Configuration::PRECISION;
 
-//	Serial.print(endStopPin);
-//	Serial.print(" position=");
-//	Serial.println(position);
-//	Serial.println();
+//	Serial.print(F("axis="));
+//	Serial.println(endStopPin);
 
 }
 
