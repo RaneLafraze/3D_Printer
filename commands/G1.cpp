@@ -181,7 +181,6 @@ void G1::execute(String line)
 		// Make sure it's not 0, which would lead to a divide error
 		if((startPos[a] - targetPos[a]) != 0)
 		{
-			// TODO: Make sure abs() doesn't cause rounding problems
 			incrementDelays[a] = moveTime / Utility::absFixed(startPos[a] - targetPos[a]) / 200;
 		} else
 		{
@@ -189,7 +188,11 @@ void G1::execute(String line)
 		}
 	}
 
-	startTime = millis();
+//	Serial.print("delay=");
+//	Serial.println(incrementDelays[0]);
+//	delay(5000);
+
+	startTime = micros();
 	isRunning = true;
 
 }
@@ -206,7 +209,7 @@ void G1::update(long delta)
 {
 	//double *currentPos = machine->getPosition();
 	double currentPos[4];
-	unsigned long currentTime = millis();
+	unsigned long currentTime = micros();
 	int finishedCount = 0;
 
 	// Get the current position
@@ -215,10 +218,13 @@ void G1::update(long delta)
 		currentPos[p] = machine->getPosition(p);
 	}
 
+//	Serial.print("e=");
+//	Serial.println((currentTime - startTime));
 
 	// Move the axis if they haven't reached the target destination yet
 	for(int a = 0; a < 4; a++)
 	{
+
 		// If it's time for the motor to move
 		if(currentTime - startTime > incrementDelays[a] * Utility::absFixed(startPos[a] - currentPos[a]))
 		{
@@ -243,7 +249,9 @@ void G1::update(long delta)
 			}
 
 //			Serial.print(F("position="));
-//			Serial.println(currentPos[0]);
+//			Serial.print(currentPos[0]);
+//			Serial.print(F(" position="));
+//			Serial.println(currentPos[1]);
 
 		} // End of time if statement
 	}
