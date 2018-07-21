@@ -39,8 +39,8 @@ private:
 	double targetPos = 0.0;
 
 	// "ul" -> https://bit.ly/2NH8Dh8
-	unsigned long elapsedTime = 0.0ul;
-	unsigned long lastPulse = 0.0ul;
+	unsigned long elapsedTime = 0.0L;
+	unsigned long lastPulse = 0.0L;
 
 	Configuration::unitEnum units = Configuration::MM;
 
