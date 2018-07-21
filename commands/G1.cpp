@@ -207,6 +207,9 @@ void G1::execute(String line)
  */
 void G1::update(long delta)
 {
+
+	machine->update(delta);
+
 	//double *currentPos = machine->getPosition();
 	double currentPos[4];
 	unsigned long currentTime = micros();
