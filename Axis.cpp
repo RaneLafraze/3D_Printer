@@ -50,7 +50,7 @@ void Axis::update(long delta)
 	if(position != targetPos)
 	{
 
-		double direction;
+		int direction = 0;
 		// TODO: Make sure these direction variables are right
 		if(position > targetPos)
 		{
@@ -59,7 +59,7 @@ void Axis::update(long delta)
 			direction = 1;
 		}
 
-		double stepAdvance;
+		double stepAdvance = 0.0;
 		if(units == Configuration::MM)
 		{
 			// * direction to support positive or negative changes
