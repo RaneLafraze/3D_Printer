@@ -16,6 +16,8 @@ public:
 	Axis(int arg_stepperPin, int arg_dirPin, int arg_endStopPin);
 	virtual ~Axis();
 
+	void update(long delta);
+
 	void moveAxis(double targetPos, int speed = -1);
 	void moveOneStep(int direction, int delay = 0);
 
@@ -34,6 +36,11 @@ private:
 
 	int endStopPin = 0; // Pin for the end-stop for this axis
 	double position = 0.0; // Position (either in mm. or in.)
+	double targetPos = 0.0;
+
+	// "ul" -> https://bit.ly/2NH8Dh8
+	unsigned long elapsedTime = 0.0ul;
+	unsigned long lastPulse = 0.0ul;
 
 	Configuration::unitEnum units = Configuration::MM;
 
