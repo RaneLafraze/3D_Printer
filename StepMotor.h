@@ -13,15 +13,18 @@ public:
 	void move(int steps, int time = -1);
 	//void move(int steps);
 	void step(int direction);
+	bool pulse(int direction);
+
+	// Returns "stepper-PIN" where PIN is the starting pin
+	String getStepperId();
 
 private:
 
 	const int STEP_PIN;
 	const int DIR_PIN;
 
-public:
-	// Returns "stepper-PIN" where PIN is the starting pin
-	String getStepperId();
+	bool isHigh = false; // Is the STEP pin high?
+
 };
 
 #endif

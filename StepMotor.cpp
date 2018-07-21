@@ -121,22 +121,73 @@ void StepMotor::move(int steps, int time)
 void StepMotor::step(int direction)
 {
 
+	pulse(direction);
+	delayMicroseconds(Configuration::MIN_STEPPER_DELAY);
+	pulse(direction);
+
+//	// TODO: Make sure these direction values are correct
+//	if(direction == 1)
+//	{
+//		digitalWrite(DIR_PIN, HIGH);
+//	} else if(direction == -1)
+//	{
+//		digitalWrite(DIR_PIN, LOW);
+//	} else
+//	{
+//		// direction is invalid, so exit
+//		return;
+//	}
+//
+//	digitalWrite(STEP_PIN, HIGH);
+//	delayMicroseconds(Configuration::MIN_STEPPER_DELAY); // Fastest delay for Arduino
+//	digitalWrite(STEP_PIN, LOW);
+
+}
+
+/**
+ * Will pulse the step pin to achieve movement in the motor. The
+ * integer parameter determines the direction of the motor. A positive
+ * 1 will turn clockwise, whereas a negative one will turn counter-clockwise.
+ * This has no built in delay in order to achieve synchronous operations.
+ * It will return true when the shaft is unpowered (STEP_PIN is LOW)
+ *
+ * @param direction
+ * direction of the shaft; positive -> clockwise, negative -> counter
+ *
+ * @return
+ * True, when the STEP pin has written a value of LOW. Any other time,
+ * false will be returned.
+ */
+bool StepMotor::pulse(int direction)
+{
+
 	// TODO: Make sure these direction values are correct
-	if(direction == 1)
+	if(direction >= 1)
 	{
 		digitalWrite(DIR_PIN, HIGH);
-	} else if(direction == -1)
+	} else if(direction <= -1)
 	{
 		digitalWrite(DIR_PIN, LOW);
 	} else
 	{
 		// direction is invalid, so exit
-		return;
+		return false;
 	}
 
-	digitalWrite(STEP_PIN, HIGH);
-	delayMicroseconds(Configuration::MIN_STEPPER_DELAY); // Fastest delay for Arduino
-	digitalWrite(STEP_PIN, LOW);
+	if(isHigh)
+	{
+		digitalWrite(STEP_PIN, LOW);
+		isHigh = false;
+		return true; // To signify the end of a step
+	} else {
+		digitalWrite(STEP_PIN, HIGH);
+		isHigh = true;
+		return false; // This will have moved the motor, but needs to be ended
+	}
+
+//	digitalWrite(STEP_PIN, HIGH);
+//	delayMicroseconds(Configuration::MIN_STEPPER_DELAY); // Fastest delay for Arduino
+//	digitalWrite(STEP_PIN, LOW);
 
 }
 
