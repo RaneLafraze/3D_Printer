@@ -16,6 +16,8 @@ public:
 	Machine();
 	virtual ~Machine();
 
+	void update(long delta);
+
 	// Parses n number of lines in the gcode
 	void parseGcode(int lineCount, int offset);
 	void parseGcode(); // Creates commands for ALL gcode instruction

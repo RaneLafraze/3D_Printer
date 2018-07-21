@@ -18,6 +18,20 @@ Machine::~Machine()
 }
 
 /**
+ * Should be called in a loop. Will update axis position,
+ * possibly temperature of bed / extruder, etc.
+ */
+void Machine::update(long delta)
+{
+	// Call the update methods in axis to move them
+	xAxis.update(delta);
+	yAxis.update(delta);
+	zAxis.update(delta);
+	eAxis.update(delta);
+
+}
+
+/**
  * Creates all of the commands for the entire
  * g-code content. It pushes each new command
  * to the back of the commands deque, and the
