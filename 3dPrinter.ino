@@ -56,7 +56,7 @@ void loop()
 
 	} else
 	{
-		g1Command.update(0.0);
+		g1Command.update(micros() - lastUpdate);
 		//Serial.println((micros() - lastUpdate));
 	}
 
