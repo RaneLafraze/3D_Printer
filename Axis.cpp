@@ -51,13 +51,9 @@ void Axis::update(long delta)
 	// If our current position is not our target position, move
 	if(position != targetPos)
 	{
-		// Multiply to avoid arithmetic errors
-		position = position * Configuration::PRECISION;
-		targetPos = targetPos * Configuration::PRECISION;
-
-//		Serial.print(position);
-//		Serial.print(" -> ");
-//		Serial.println(targetPos);
+//		// Multiply to avoid arithmetic errors
+//		position = position * Configuration::PRECISION;
+//		targetPos = targetPos * Configuration::PRECISION;
 
 		int direction = 0;
 		// TODO: Make sure these direction variables are right
@@ -78,31 +74,31 @@ void Axis::update(long delta)
 		}
 
 		// If the next step can occur, do it!
-		if(elapsedTime - lastPulse >= stepInterval)
+		if(elapsedTime - lastPulse >= nextWait)
 		{
 			if(axisMotor->pulse(direction)) // If motor moved, update position
 			{
 				// Multiply to avoid arithmetic errors
-				//position = position * Configuration::PRECISION;
+				position = position * Configuration::PRECISION;
 				position = position + stepAdvance;
-				//position = position / Configuration::PRECISION;
+				position = position / Configuration::PRECISION;
 				// Convert back to readable double
-				if(endStopPin == 5)
-				{
-					Serial.print("x ");
-					Serial.println(stepAdvance);
-				} else if(endStopPin == 8)
-				{
-					Serial.print("y ");
-					Serial.println(stepAdvance);
-				}
+
+				nextWait = stepInterval;
+			} else
+			{
+				nextWait = Configuration::MIN_STEPPER_DELAY;
+				// Since we don't want the step interval between
+				// the high->low pulse of motor, only between
+				// steps. i.e. a stepInterval of 1 second should only
+				// effect the step time and not be doubled by high->low pulse
 			}
 			lastPulse = elapsedTime;
 		}
 
-		// Convert back to readable double
-		position = position / Configuration::PRECISION;
-		targetPos = targetPos / Configuration::PRECISION;
+//		// Convert back to readable double
+//		position = position / Configuration::PRECISION;
+//		targetPos = targetPos / Configuration::PRECISION;
 	} // End of movement if
 
 }
@@ -139,6 +135,10 @@ void Axis::moveAxis(double targetPos, int speed)
 {
 
 	this->targetPos = targetPos;
+	if(speed == -1)
+	{
+		speed = Configuration::MIN_STEPPER_DELAY;
+	}
 	this->stepInterval = speed;
 
 //	double movement = -1 * (position - targetPos);
@@ -254,6 +254,11 @@ void Axis::setPosition(double newPosition)
 double Axis::getPosition()
 {
 	return position;
+}
+
+bool Axis::getIsIdle()
+{
+	return isIdle;
 }
 
 void Axis::setUnits(Configuration::unitEnum newUnit)
