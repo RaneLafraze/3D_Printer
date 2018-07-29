@@ -28,6 +28,8 @@ public:
 	double getPosition();
 	void setPosition(double newPosition);
 
+	bool getIsIdle();
+
 	void setUnits(Configuration::unitEnum newUnit);
 	Configuration::unitEnum getUnits();
 
@@ -37,11 +39,14 @@ private:
 	int endStopPin = 0; // Pin for the end-stop for this axis
 	double position = 0.0; // Position (either in mm. or in.)
 	double targetPos = 0.0;
-	int stepInterval = 0;
+	double stepInterval = 0.0; // Delay between steps to target
+	bool isIdle = true; // Is the motor moving / not at targetPos?
 
 	// "ul" -> https://bit.ly/2NH8Dh8
 	unsigned long elapsedTime = 0.0L;
 	unsigned long lastPulse = 0.0L;
+	double nextWait = 0.0;
+	// ^ min_stepp_delay between high->low pulse and stepInt between low->high
 
 	Configuration::unitEnum units = Configuration::MM;
 

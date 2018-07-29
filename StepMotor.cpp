@@ -81,7 +81,7 @@ StepMotor::~StepMotor()
  * given number of steps. NOTE: By default, this method
  * does not have a built in delay. It is HIGHLY recommended
  * that a integer greater than 300 is passed in to the second
- * parameter.
+ * parameter. This is a blocking function call.
  *
  * @param steps
  * the number of steps to move
@@ -184,10 +184,6 @@ bool StepMotor::pulse(int direction)
 		isHigh = true;
 		return false; // This will have moved the motor, but needs to be ended
 	}
-
-//	digitalWrite(STEP_PIN, HIGH);
-//	delayMicroseconds(Configuration::MIN_STEPPER_DELAY); // Fastest delay for Arduino
-//	digitalWrite(STEP_PIN, LOW);
 
 }
 
