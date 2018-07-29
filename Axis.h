@@ -37,6 +37,7 @@ private:
 	int endStopPin = 0; // Pin for the end-stop for this axis
 	double position = 0.0; // Position (either in mm. or in.)
 	double targetPos = 0.0;
+	int stepInterval = 0;
 
 	// "ul" -> https://bit.ly/2NH8Dh8
 	unsigned long elapsedTime = 0.0L;

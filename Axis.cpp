@@ -25,6 +25,8 @@ Axis::Axis(int arg_stepperPin, int arg_dirPin, int arg_endStopPin)
 	maxSpeedMM = round((maxSpeedMM * 1000) / Configuration::STEP_PER_MM);
 	maxSpeedIN = round((maxSpeedIN * 1000) / Configuration::STEP_PER_IN);
 
+	lastPulse = micros();
+
 }
 
 Axis::~Axis()
@@ -49,6 +51,13 @@ void Axis::update(long delta)
 	// If our current position is not our target position, move
 	if(position != targetPos)
 	{
+		// Multiply to avoid arithmetic errors
+		position = position * Configuration::PRECISION;
+		targetPos = targetPos * Configuration::PRECISION;
+
+//		Serial.print(position);
+//		Serial.print(" -> ");
+//		Serial.println(targetPos);
 
 		int direction = 0;
 		// TODO: Make sure these direction variables are right
@@ -69,18 +78,31 @@ void Axis::update(long delta)
 		}
 
 		// If the next step can occur, do it!
-		if(elapsedTime - lastPulse >= Configuration::MIN_STEPPER_DELAY)
+		if(elapsedTime - lastPulse >= stepInterval)
 		{
 			if(axisMotor->pulse(direction)) // If motor moved, update position
 			{
 				// Multiply to avoid arithmetic errors
-				position = position * Configuration::PRECISION;
+				//position = position * Configuration::PRECISION;
 				position = position + stepAdvance;
-				position = position / Configuration::PRECISION;
+				//position = position / Configuration::PRECISION;
 				// Convert back to readable double
+				if(endStopPin == 5)
+				{
+					Serial.print("x ");
+					Serial.println(stepAdvance);
+				} else if(endStopPin == 8)
+				{
+					Serial.print("y ");
+					Serial.println(stepAdvance);
+				}
 			}
 			lastPulse = elapsedTime;
 		}
+
+		// Convert back to readable double
+		position = position / Configuration::PRECISION;
+		targetPos = targetPos / Configuration::PRECISION;
 	} // End of movement if
 
 }
@@ -116,37 +138,40 @@ void Axis::update(long delta)
 void Axis::moveAxis(double targetPos, int speed)
 {
 
-	double movement = -1 * (position - targetPos);
-	// * -1 to make the direction move correctly
-	// Otherwise, the movement variable is inverted
+	this->targetPos = targetPos;
+	this->stepInterval = speed;
 
-	// If speed was not assigned, assume the fastest travel speed
-	if(speed == -1)
-	{
-		if(units == Configuration::MM)
-		{
-			speed = maxSpeedMM;
-		} else if(units == Configuration::IN)
-		{
-			speed = maxSpeedIN;
-		} else
-		{
-			speed = 1;
-		}
-	}
-
-	// A safety check should have been performed
-	// before this method to ensure that
-	// targetPos was within the boundaries
-	// of the build dimensions
-	if(units == Configuration::MM)
-	{
-		axisMotor->move(movement * Configuration::STEP_PER_MM, speed);
-	} else if(units == Configuration::IN)
-	{
-		axisMotor->move(movement * Configuration::STEP_PER_IN, speed);
-	}
-	position = targetPos;
+//	double movement = -1 * (position - targetPos);
+//	// * -1 to make the direction move correctly
+//	// Otherwise, the movement variable is inverted
+//
+//	// If speed was not assigned, assume the fastest travel speed
+//	if(speed == -1)
+//	{
+//		if(units == Configuration::MM)
+//		{
+//			speed = maxSpeedMM;
+//		} else if(units == Configuration::IN)
+//		{
+//			speed = maxSpeedIN;
+//		} else
+//		{
+//			speed = 1;
+//		}
+//	}
+//
+//	// A safety check should have been performed
+//	// before this method to ensure that
+//	// targetPos was within the boundaries
+//	// of the build dimensions
+//	if(units == Configuration::MM)
+//	{
+//		axisMotor->move(movement * Configuration::STEP_PER_MM, speed);
+//	} else if(units == Configuration::IN)
+//	{
+//		axisMotor->move(movement * Configuration::STEP_PER_IN, speed);
+//	}
+//	position = targetPos;
 
 }
 
@@ -225,7 +250,6 @@ bool Axis::readEndStopPin()
 void Axis::setPosition(double newPosition)
 {
 	position = newPosition;
-	Serial.println("SET");
 }
 double Axis::getPosition()
 {

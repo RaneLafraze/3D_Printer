@@ -165,6 +165,7 @@ void G1::execute(String line)
 	double moveTime = 0.0;
 	if(machine->getAxis(largestAxis)->getUnits() == Configuration::MM)
 	{
+		// TODO: See if this needs to be multiplied by 2
 		moveTime = largestMove / Configuration::MM_PER_STEP * Configuration::MIN_STEPPER_DELAY;
 	} else if(machine->getAxis(largestAxis)->getUnits() == Configuration::IN)
 	{
@@ -181,12 +182,17 @@ void G1::execute(String line)
 		// Make sure it's not 0, which would lead to a divide error
 		if((startPos[a] - targetPos[a]) != 0)
 		{
+			// Divide by 200 for revolutions per rotation of stepper
 			incrementDelays[a] = moveTime / Utility::absFixed(startPos[a] - targetPos[a]) / 200;
 		} else
 		{
 			incrementDelays[a] = 0.0;
 		}
 	}
+
+	machine->getAxis('x')->moveAxis(targetPos[0], incrementDelays[0]);
+	machine->getAxis('y')->moveAxis(targetPos[1], incrementDelays[1]);
+	machine->getAxis('z')->moveAxis(targetPos[2], incrementDelays[2]);
 
 //	Serial.print("delay=");
 //	Serial.println(incrementDelays[0]);
@@ -219,45 +225,50 @@ void G1::update(long delta)
 	for(int p = 0; p < 4; p++)
 	{
 		currentPos[p] = machine->getPosition(p);
+
+		if(currentPos[p] == targetPos[p])
+		{
+			finishedCount++;
+		}
 	}
 
 //	Serial.print("e=");
 //	Serial.println((currentTime - startTime));
 
 	// Move the axis if they haven't reached the target destination yet
-	for(int a = 0; a < 4; a++)
-	{
-
-		// If it's time for the motor to move
-		if(currentTime - startTime > incrementDelays[a] * Utility::absFixed(startPos[a] - currentPos[a]))
-		{
-			if((checkEndstop) && (getAxisByNum(a)->readEndStopPin()))
-			{
-				// If end-stop checking is enabled and the end-stop has
-				// been triggered, skip this axis.
-				finishedCount++;
-				continue;
-			}
-
-			// Move the axis toward the target
-			if(currentPos[a] < targetPos[a])
-			{
-				getAxisByNum(a)->moveOneStep(1);
-			} else if(currentPos[a] > targetPos[a])
-			{
-				getAxisByNum(a)->moveOneStep(-1);
-			}  else // Increment the finish count because the goal was met
-			{
-				finishedCount++;
-			}
-
-//			Serial.print(F("position="));
-//			Serial.print(currentPos[0]);
-//			Serial.print(F(" position="));
-//			Serial.println(currentPos[1]);
-
-		} // End of time if statement
-	}
+//	for(int a = 0; a < 4; a++)
+//	{
+//
+//		// If it's time for the motor to move
+//		if(currentTime - startTime > incrementDelays[a] * Utility::absFixed(startPos[a] - currentPos[a]))
+//		{
+//			if((checkEndstop) && (getAxisByNum(a)->readEndStopPin()))
+//			{
+//				// If end-stop checking is enabled and the end-stop has
+//				// been triggered, skip this axis.
+//				finishedCount++;
+//				continue;
+//			}
+//
+//			// Move the axis toward the target
+//			if(currentPos[a] < targetPos[a])
+//			{
+//				getAxisByNum(a)->moveOneStep(1);
+//			} else if(currentPos[a] > targetPos[a])
+//			{
+//				getAxisByNum(a)->moveOneStep(-1);
+//			}  else // Increment the finish count because the goal was met
+//			{
+//				finishedCount++;
+//			}
+//
+////			Serial.print(F("position="));
+////			Serial.print(currentPos[0]);
+////			Serial.print(F(" position="));
+////			Serial.println(currentPos[1]);
+//
+//		} // End of time if statement
+//	}
 
 	if(finishedCount == 4) // If all axis have finished
 	{
